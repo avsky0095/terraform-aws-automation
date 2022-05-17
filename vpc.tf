@@ -7,6 +7,9 @@ resource "aws_vpc" "Main" {                 # Creating VPC here
   cidr_block       = var.main_vpc_cidr      # Defining the CIDR block use 10.0.0.0/24 for demo
   instance_tenancy = "default"
 
+  enable_dns_support = true
+  enable_dns_hostnames = true
+
   tags = {
     Name = "test VPC"
   }
@@ -19,12 +22,10 @@ resource "aws_vpc" "Main" {                 # Creating VPC here
 #  Create Internet Gateway and attach it to VPC
 resource "aws_internet_gateway" "IGW" {     # Creating Internet Gateway
   vpc_id = aws_vpc.Main.id                  # vpc_id will be generated after we create VPC
-
   tags = {
     Name = "test - Internet Gateway (igw)"
   }
 }
-
 
 # Creating Elastic IP for NAT Gateway
 resource "aws_eip" "nateIP" {
@@ -51,9 +52,9 @@ resource "aws_nat_gateway" "NATgw" {
 
 #  Create a Public Subnets.
 resource "aws_subnet" "publicsubnets" {     # Creating Public Subnets
-  vpc_id     = aws_vpc.Main.id
-  cidr_block = var.public_subnets           # CIDR block of public subnets
-  availability_zone = var.availability_zone
+  vpc_id                = aws_vpc.Main.id
+  cidr_block            = var.public_subnets           # CIDR block of public subnets
+  availability_zone     = var.availability_zone
 
   tags = {
     Name = "test - Public Subnet"
@@ -62,9 +63,9 @@ resource "aws_subnet" "publicsubnets" {     # Creating Public Subnets
 
 #  Create a Private Subnet                  # Creating Private Subnets
 resource "aws_subnet" "privatesubnets" {
-  vpc_id     = aws_vpc.Main.id
-  cidr_block = var.private_subnets          # CIDR block of private subnets
-  availability_zone = var.availability_zone
+  vpc_id                = aws_vpc.Main.id
+  cidr_block            = var.private_subnets          # CIDR block of private subnets
+  availability_zone     = var.availability_zone
 
   tags = {
     Name = "test - Private Subnet"

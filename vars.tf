@@ -1,15 +1,24 @@
 
+# REGION USE
 variable "region" {}
 
+# AVAILABILITY ZONE
+variable "availability_zone" {}
+variable "availability_zone_sec" {}
+
+# VPC IPs
 variable "main_vpc_cidr" {}
 
+# SUBNETS
 variable "public_subnets" {}
 variable "private_subnets" {}
 
-variable "availability_zone" {}
-variable "availability_zone_a" {}
-variable "availability_zone_b" {}
-
+# MY PUBLIC IP
 variable "myIP" {}
 
-# variable "user_data" {}
+# Keypairs
+variable "priv_keypairs" {}
+
+# AWS ACCESS KEY
+variable "aws_access_key_id" {}
+variable "aws_secret_access_key" {}
