@@ -6,14 +6,31 @@ resource "aws_network_acl" "main" {
 # OUTBOUND
 # ---------------------------------------------------------------
 
-  # outbound anywhere
   egress {
-    protocol   = "-1"
+    protocol   = "tcp"
     rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
+    from_port  = 80
+    to_port    = 80
+  }
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 110
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 443
+    to_port    = 443
+  }
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 120
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
   }
 
 
@@ -50,6 +67,16 @@ resource "aws_network_acl" "main" {
     to_port    = 22
   }
 
+  # Another ports
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 130
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
+  }
+
   tags = {
     Name = "test - Network ACLs"
   }
@@ -57,7 +84,9 @@ resource "aws_network_acl" "main" {
 
 # network association to public subnet
 resource "aws_network_acl_association" "nacl_assoc_pubsub" {
-  network_acl_id = aws_network_acl.main.id
+  # network_acl_id = aws_network_acl.main.id
+  # subnet_id = aws_subnet.publicsubnets.id
+  network_acl_id = aws_network_acl.secondary.id
   subnet_id = aws_subnet.publicsubnets.id
 }
 
@@ -67,4 +96,39 @@ resource "aws_network_acl_association" "nacl_assoc_pubsub" {
 #   subnet_id = aws_subnet.privatesubnets.id
 # }
 
+
 // second acl
+resource "aws_network_acl" "secondary" {
+  vpc_id = aws_vpc.Main.id
+  
+
+# OUTBOUND
+# ---------------------------------------------------------------
+
+  # outbound anywhere
+  egress {
+    protocol   = "-1"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+# INBOUND
+# ---------------------------------------------------------------
+
+  # HTTP
+  ingress {
+    protocol   = "-1"
+    rule_no    = 100          //110, 120, 130, dst
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "test_sec - Network ACLs"
+  }  
+}

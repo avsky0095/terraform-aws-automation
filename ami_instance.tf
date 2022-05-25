@@ -9,7 +9,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu-minimal/images-testing/hvm-ssd/ubuntu-jammy-daily-amd64-minimal-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
   filter {
@@ -48,3 +48,40 @@ data "aws_ami" "alpine" {
 
   owners = ["538276064493"] # Alpine
 }
+
+
+# AMAZON LINUX 2
+
+data "aws_ami" "ami2" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-2.0.20220426.0-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["785737495101"]
+}
+
+
+data "aws_ec2_instance_type_offering" "available" {
+  filter {
+    name   = "instance-type"
+    values = ["t3.micro"]                   //arrays
+  }
+
+  preferred_instance_types = ["t3.micro"]
+}
+
+
+// search owner number di EC2 > side panel Images - AMIs > pilih Public AMI 
