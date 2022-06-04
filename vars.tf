@@ -4,9 +4,13 @@ variable "region" {
   description = "region yang dipilih"
 }
 
-# AVAILABILITY ZONE
+# AVAILABILITY ZONEs
 variable "availability_zone" {
-  description = "az yang digunakan"
+  description = "az-primary yang digunakan"
+}
+
+variable "availability_zone_sec" {
+  description = "az-secondary yang digunakan"
 }
 
 # VPC IPs
@@ -23,11 +27,20 @@ variable "private_subnets" {
   description = "cidr subnet untuk private ip"
 }
 
+# SUBNETS SECONDARY
+variable "public_subnets_sec" {
+  description = "cidr subnet untuk public ip sec"
+}
+
+variable "private_subnets_sec" {
+  description = "cidr subnet untuk private ip sec"
+}
+
 
 # SECURITY GROUP INGRESS CIDR FOR NAT-INSTANCE
-variable "security_group_ingress_cidr_ipv4" {
-  description = "CIDR block ingress nat-sg"
-}
+# variable "security_group_ingress_cidr_ipv4" {
+#   description = "CIDR block ingress nat-sg"
+# }
 
 # MY PUBLIC IP
 variable "myIP" {
