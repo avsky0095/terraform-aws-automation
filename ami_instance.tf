@@ -33,7 +33,7 @@ data "aws_ami" "alpine" {
 
   filter {
     name   = "name"
-    values = ["alpine-3.15.4-x86_64-bios-tiny-r0"]
+    values = ["alpine-3.16.0-x86_64-bios-tiny-r0"]
   }
 
   filter {
@@ -74,6 +74,55 @@ data "aws_ami" "ami2" {
 }
 
 
+
+# MOODLE BITNAMI
+
+data "aws_ami" "moodle" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["bitnami-moodle-4.0.1-2-r02-linux-debian-10-x86_64-hvm-ebs-nami-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["786482375130"]
+}
+
+
+# WORDPRESS BITNAMI
+
+data "aws_ami" "wordpress" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["openlitespeed-wordpress-v24-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  owners = ["786482375130"]
+}
+
+
 data "aws_ec2_instance_type_offering" "available" {
   filter {
     name   = "instance-type"
@@ -84,4 +133,21 @@ data "aws_ec2_instance_type_offering" "available" {
 }
 
 
+
+
 // search owner number di EC2 > side panel Images - AMIs > pilih Public AMI 
+
+
+data "aws_instances" "NAT-instance" {
+  instance_tags = {
+    # Name = "NAT instance"
+    Role = "nat"
+  }
+
+  # filter {
+  #   name   = "instance.group-id"
+  #   values = ["sg-12345678"]
+  # }
+
+  instance_state_names = ["running"]
+}
