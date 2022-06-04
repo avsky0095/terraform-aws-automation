@@ -1,7 +1,4 @@
 
-# assets files
-aws_credentials
-
 # Local .terraform directories
 **/.terraform/*
 
