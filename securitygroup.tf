@@ -1,3 +1,7 @@
+
+# PUBLIC SUBNET SECURITY GROUP
+# ---------------------------------------------------------------
+
 resource "aws_security_group" "publicsub-sg" {
   name        = "publicsub-sg"
   description = "Allow HTTP+SSH inbound traffic"
@@ -28,7 +32,7 @@ resource "aws_security_group" "publicsub-sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [ var.myIP ]
+    cidr_blocks = [var.myIP]
     # cidr_blocks = [aws_vpc.Main.cidr_block]
     # ipv6_cidr_blocks = ["::/0"]
     # self             = true
@@ -50,18 +54,21 @@ resource "aws_security_group" "publicsub-sg" {
 }
 
 
+# PRIVATE SUBNET SECURITY GROUP
+# ---------------------------------------------------------------
+
 resource "aws_security_group" "privatesub-sg" {
   name        = "privsub-sg"
   description = "Allow inbound from public subnet"
   vpc_id      = aws_vpc.Main.id
 
   ingress {
-    description = "ALL"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    # security_groups = ["${aws_security_group.publicsub-sg.id}"]
-    cidr_blocks = ["0.0.0.0/0"]
+    description     = "ALL"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    security_groups = ["${aws_security_group.NAT-sg.id}"]
+    # cidr_blocks = ["0.0.0.0/0"]
     # ipv6_cidr_blocks = ["::/0"]
     # self             = true
   }
@@ -81,11 +88,13 @@ resource "aws_security_group" "privatesub-sg" {
 }
 
 
-# security group for NAT
+# NETWORK ADDRESS TRANSLATION (NAT-INSTANCE) SECURITY GROUP
+# ---------------------------------------------------------------
+
 resource "aws_security_group" "NAT-sg" {
-  name          = "NAT security group"
-  description   = "security group for NAT-gw/NAT-instance"
-  vpc_id        = aws_vpc.Main.id
+  name        = "NAT security group"
+  description = "security group for NAT-gw/NAT-instance"
+  vpc_id      = aws_vpc.Main.id
 
   ingress {
     description = "inbound HTTP"
@@ -121,7 +130,7 @@ resource "aws_security_group" "NAT-sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     # self        = true
-  }  
+  }
 
   tags = {
     "Name" = "NAT security group"
@@ -129,11 +138,13 @@ resource "aws_security_group" "NAT-sg" {
 }
 
 
-// untuk testing
-# security group ALL TRAFFIC
+# ALL TRAFFIC SECURITY GROUP (FOR TESTING ONLY)
+# ---------------------------------------------------------------
+
 resource "aws_security_group" "ALL-sg" {
+  name        = "All traffic sec group"
   description = "security group for ALL traffic"
-  vpc_id = aws_vpc.Main.id
+  vpc_id      = aws_vpc.Main.id
 
   ingress {
     description = "inbound from ALL traffic"
@@ -154,7 +165,7 @@ resource "aws_security_group" "ALL-sg" {
   }
 
   tags = {
-    "Name"                = "Default security group"
-    "Source/Destination"  = "All Traffic"
+    "Name" = "ALL Traffic secgroup"
+    # "Source/Destination"  = "All Traffic"
   }
 }
