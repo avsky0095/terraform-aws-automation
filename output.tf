@@ -1,16 +1,17 @@
 
-// disabled for future use
-# output "ec2_public_dns" {
-#   description             = "List of public DNS addresses assigned to the instances, if applicable"
-#   value                   = [aws_instance.testing-my-ec2.public_dns]
+
+# output "ec2_eip_NATBas_public_dns" {
+#   description = "Output NAT instance public DNS"
+#   value       = aws_instance.nat-bastion.public_dns        // public_ip/_dns/private_ip/_dns
 # }
 
-output "ec2_NATinst_public_dns" {
-  description             = "List of public DNS addresses assigned to the instances, if applicable"
-  value                   = [aws_instance.nat_instance.public_dns]
-}
+# # output "rds_hostname" {
+# #   description = "RDS instance hostname"
+# #   value       = aws_db_instance.rds-test-tf.address
+# #   # sensitive   = true
+# # }
 
-output "ec2_private_ip" {
-  description             = "List of public DNS addresses assigned to the instances, if applicable"
-  value                   = [aws_spot_instance_request.test-priv.private_ip]
-}
+# output "elb-dns-name" {
+#   description = "dns dari elb"
+#   value       = aws_lb.test-loadbalancer.dns_name
+# }
